@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="mathematics-svgrepo-com.svg" type="image/x-icon">
+    <title>Quantix</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.75);
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(at 40% 20%, hsla(240,100%,94%,0.5) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(240,100%,94%,0.5) 0px, transparent 50%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(16px);
+            background: var(--glass);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Calculator Section */
+        .calculator-section {
+            height: 100%;
+        }
+
+        .display {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            text-align: right;
+            padding: 0.5rem 1rem;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: var(--text);
+            outline: none;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: var(--text);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: none;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-span-2 {
+            grid-column: span 2;
+        }
+
+        /* Badges Section */
+        .badges-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 1rem;
+            color: var(--text-light);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge.locked {
+            filter: grayscale(1);
+            opacity: 0.6;
+        }
+
+        .badge-icon {
+            font-size: 1.5rem;
+        }
+
+        .badge-info {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.25rem;
+            transition: bottom 0.3s ease;
+        }
+
+        .badge:hover .badge-info {
+            bottom: 0;
+        }
+
+        /* History Section */
+        .history-section {
+            margin-top: 1.5rem;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .history-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-equation {
+            color: var(--text-light);
+        }
+
+        .history-result {
+            font-weight: 600;
+        }
+
+        /* File Input */
+        .file-input {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .keypad {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes badgeUnlock {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .unlocked {
+            animation: badgeUnlock 0.5s ease-out forwards;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="glass-panel">
+            <h1>QuanTix</h1>
+            <div class="profile-stats">
+                <div class="stat">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.92V5H11v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                    </svg>
+                    <span id="calc-count">0</span>
+                </div>
+                <div class="stat">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
+                    </svg>
+                    <span id="badge-count">0/12</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="profile-section glass-panel">
+            <div class="profile-header">
+                <img id="profile-pic" class="profile-pic" src="https://placehold.co/200x200" alt="Default profile picture">
+                <input type="file" id="file-input" class="file-input" accept="image/*">
+                <div class="profile-info">
+                    <h2 class="profile-name">Math Explorer</h2>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <i class="fas fa-calculator"></i>
+                            <span id="session-count">0 today</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-trophy"></i>
+                            <span id="high-score">No high score</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="badges-section">
+                <h3 class="section-title">Math Badges</h3>
+                <div class="badges-grid" id="badges-container">
+                    <!-- Badges will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-section glass-panel">
+            <input type="text" class="display" id="display" readonly>
+
+            <div class="keypad">
+                <button class="btn btn-secondary" onclick="addToDisplay('(')">(</button>
+                <button class="btn btn-secondary" onclick="addToDisplay(')')">)</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('π')">π</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('e')">e</button>
+                <button class="btn btn-secondary" onclick="clearDisplay()">C</button>
+
+                <button class="btn btn-secondary" onclick="addFunction('sin(')">sin</button>
+                <button class="btn btn-secondary" onclick="addFunction('cos(')">cos</button>
+                <button class="btn btn-secondary" onclick="addFunction('tan(')">tan</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('^')">^</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('√(')">√</button>
+
+                <button class="btn" onclick="addToDisplay('7')">7</button>
+                <button class="btn" onclick="addToDisplay('8')">8</button>
+                <button class="btn" onclick="addToDisplay('9')">9</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('*')">×</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('/')">÷</button>
+
+                <button class="btn" onclick="addToDisplay('4')">4</button>
+                <button class="btn" onclick="addToDisplay('5')">5</button>
+                <button class="btn" onclick="addToDisplay('6')">6</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('+')">+</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('-')">-</button>
+
+                <button class="btn" onclick="addToDisplay('1')">1</button>
+                <button class="btn" onclick="addToDisplay('2')">2</button>
+                <button class="btn" onclick="addToDisplay('3')">3</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('log(')">log</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('ln(')">ln</button>
+
+                <button class="btn" onclick="addToDisplay('0')">0</button>
+                <button class="btn" onclick="addToDisplay('.')">.</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('Math.PI')">π</button>
+                <button class="btn btn-secondary" onclick="addToDisplay('Math.E')">e</button>
+                <button class="btn btn-primary btn-span-2" onclick="calculate()">=</button>
+            </div>
+
+            <div class="history-section">
+                <h3 class="section-title">Calculation History</h3>
+                <div class="history-list" id="history-container">
+                    <!-- History will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const display = document.getElementById('display');
+        const profilePic = document.getElementById('profile-pic');
+        const fileInput = document.getElementById('file-input');
+        const badgesContainer = document.getElementById('badges-container');
+        const historyContainer = document.getElementById('history-container');
+        const calcCountElement = document.getElementById('calc-count');
+        const badgeCountElement = document.getElementById('badge-count');
+        const sessionCountElement = document.getElementById('session-count');
+        const highScoreElement = document.getElementById('high-score');
+
+        // State variables
+        let calculationHistory = [];
+        let sessionCalculations = 0;
+        let highScore = 0;
+        let totalCalculations = 0;
+        const badges = [
+            { id: 'first-calculation', name: 'First Step', icon: 'fa-solid fa-1', description: 'Performed your first calculation', unlocked: false },
+            { id: 'trigonometry', name: 'Trig Master', icon: 'fa-solid fa-triangle', description: 'Used trigonometry functions', unlocked: false },
+            { id: 'exponent', name: 'Power User', icon: 'fa-solid fa-superscript', description: 'Used exponents', unlocked: false },
+            { id: 'logarithms', name: 'Logarithmic', icon: 'fa-solid fa-calculator', description: 'Used logarithms', unlocked: false },
+            { id: 'pi-e', name: 'Constant User', icon: 'fa-solid fa-circle', description: 'Used π or e', unlocked: false },
+            { id: '10-calcs', name: 'Deca Calculator', icon: 'fa-solid fa-10', description: 'Performed 10 calculations', unlocked: false },
+            { id: '50-calcs', name: 'Hyper Calculator', icon: 'fa-solid fa-infinity', description: 'Performed 50 calculations', unlocked: false },
+            { id: 'complex', name: 'Complex Thinker', icon: 'fa-solid fa-brain', description: 'Solved a complex equation', unlocked: false },
+            { id: 'sqrt', name: 'Root Explorer', icon: 'fa-solid fa-square-root-alt', description: 'Used square roots', unlocked: false },
+            { id: 'scientist', name: 'Junior Scientist', icon: 'fa-solid fa-flask', description: 'Used all scientific functions', unlocked: false },
+            { id: 'night-owl', name: 'Night Owl', icon: 'fa-solid fa-moon', description: 'Calculated at night', unlocked: false },
+            { id: 'precision', name: 'Precision Master', icon: 'fa-solid fa-bullseye', description: 'Got a result with 5+ decimal places', unlocked: false }
+        ];
+
+        // Initialize the app
+        function init() {
+            loadProfilePicture();
+            loadCalculations();
+            renderBadges();
+            renderHistory();
+            updateStats();
+
+            // Set current session date if not set
+            if (!localStorage.getItem('currentSessionDate')) {
+                localStorage.setItem('currentSessionDate', new Date().toDateString());
+            } else {
+                // Check if session date is today, reset count if not
+                const storedDate = localStorage.getItem('currentSessionDate');
+                const today = new Date().toDateString();
+                if (storedDate !== today) {
+                    sessionCalculations = 0;
+                    localStorage.setItem('currentSessionDate', today);
+                    saveSessionCalculations();
+                }
+            }
+        }
+
+        // Profile picture handling
+        function loadProfilePicture() {
+            const savedPic = localStorage.getItem('profilePic');
+            if (savedPic) {
+                profilePic.src = savedPic;
+            }
+        }
+
+        profilePic.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profilePic.src = event.target.result;
+                    localStorage.setItem('profilePic', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Calculator functions
+        function addToDisplay(value) {
+            display.value += value;
+        }
+
+        function addFunction(func) {
+            display.value += func;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function calculate() {
+            try {
+                // Replace display symbols with JS equivalents
+                let expression = display.value
+                    .replace(/π/g, 'Math.PI')
+                    .replace(/e/g, 'Math.E')
+                    .replace(/\^/g, '**')
+                    .replace(/√\(/g, 'Math.sqrt(');
+
+                // Evaluate the expression safely
+                // Note: In a real app, you'd want to implement a more secure evaluation
+                const result = eval(expression);
+                
+                if (isNaN(result) || !isFinite(result)) {
+                    throw new Error('Invalid result');
+                }
+
+                // Add to history
+                addToHistory(display.value, result);
+                
+                // Update display
+                display.value = result.toString();
+                
+                // Check for achievements
+                checkAchievements(display.value, expression);
+                
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        // History functions
+        function addToHistory(equation, result) {
+            calculationHistory.unshift({ equation, result });
+            if (calculationHistory.length > 10) {
+                calculationHistory.pop();
+            }
+            saveCalculations();
+            renderHistory();
+            
+            // Update calculations count
+            sessionCalculations++;
+            totalCalculations++;
+            updateStats();
+            saveSessionCalculations();
+        }
+
+        function renderHistory() {
+            historyContainer.innerHTML = '';
+            calculationHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-equation">${item.equation}</div>
+                    <div class="history-result">=${item.result}</div>
+                `;
+                historyContainer.appendChild(historyItem);
+            });
+        }
+
+        // Stats functions
+        function updateStats() {
+            calcCountElement.textContent = totalCalculations;
+            sessionCountElement.textContent = `${sessionCalculations} today`;
+            
+            // Update high score if needed
+            if (sessionCalculations > highScore) {
+                highScore = sessionCalculations;
+                highScoreElement.textContent = `${highScore} (record!)`;
+                localStorage.setItem('highScore', highScore);
+            }
+            
+            // Update badge count
+            const unlockedBadges = badges.filter(badge => badge.unlocked).length;
+            badgeCountElement.textContent = `${unlockedBadges}/${badges.length}`;
+        }
+
+        // Badges functions
+        function renderBadges() {
+            badgesContainer.innerHTML = '';
+            badges.forEach(badge => {
+                const badgeElement = document.createElement('div');
+                badgeElement.className = `badge ${badge.unlocked ? '' : 'locked'}`;
+                badgeElement.title = badge.unlocked ? badge.description : 'Locked';
+                badgeElement.innerHTML = `
+                    <i class="${badge.icon} badge-icon"></i>
+                    <div class="badge-info">${badge.description}</div>
+                `;
+                
+                if (badge.unlocked) {
+                    badgeElement.classList.add('unlocked');
+                }
+                
+                badgesContainer.appendChild(badgeElement);
+            });
+        }
+
+        function checkAchievements(result, expression) {
+            const unlockedBadges = [];
+            
+            // First calculation badge
+            if (totalCalculations === 1 && !badges[0].unlocked) {
+                badges[0].unlocked = true;
+                unlockedBadges.push(0);
+            }
+            
+            // Trigonometry badge
+            if (/sin\(|cos\(|tan\(/i.test(expression) && !badges[1].unlocked) {
+                badges[1].unlocked = true;
+                unlockedBadges.push(1);
+            }
+            
+            // Exponent badge
+            if (/\^|\*\*/.test(expression) && !badges[2].unlocked) {
+                badges[2].unlocked = true;
+                unlockedBadges.push(2);
+            }
+            
+            // Logarithm badge
+            if (/log\(|ln\(/i.test(expression) && !badges[3].unlocked) {
+                badges[3].unlocked = true;
+                unlockedBadges.push(3);
+            }
+            
+            // Pi/e badge
+            if (/Math\.PI|Math\.E|π|e/.test(expression) && !badges[4].unlocked) {
+                badges[4].unlocked = true;
+                unlockedBadges.push(4);
+            }
+            
+            // 10 calculations badge
+            if (totalCalculations >= 10 && !badges[5].unlocked) {
+                badges[5].unlocked = true;
+                unlockedBadges.push(5);
+            }
+            
+            // 50 calculations badge
+            if (totalCalculations >= 50 && !badges[6].unlocked) {
+                badges[6].unlocked = true;
+                unlockedBadges.push(6);
+            }
+            
+            // Complex equation badge
+            if (/[\+\-\*\/\^]{2,}|\(.*\(.*\)/.test(expression) && !badges[7].unlocked) {
+                badges[7].unlocked = true;
+                unlockedBadges.push(7);
+            }
+            
+            // Square root badge
+            if (/√\(|Math\.sqrt\(/i.test(expression) && !badges[8].unlocked) {
+                badges[8].unlocked = true;
+                unlockedBadges.push(8);
+            }
+            
+            // All scientific functions badge
+            if (hasUsedAllScientificFunctions() && !badges[9].unlocked) {
+                badges[9].unlocked = true;
+                unlockedBadges.push(9);
+            }
+            
+            // Night owl badge
+            const hours = new Date().getHours();
+            if ((hours >= 22 || hours <= 5) && !badges[10].unlocked) {
+                badges[10].unlocked = true;
+                unlockedBadges.push(10);
+            }
+            
+            // Precision badge
+            if (result.includes('.') && result.split('.')[1].length >= 5 && !badges[11].unlocked) {
+                badges[11].unlocked = true;
+                unlockedBadges.push(11);
+            }
+            
+            if (unlockedBadges.length > 0) {
+                renderBadges();
+                updateStats();
+                showBadgeNotification(unlockedBadges);
+            }
+        }
+
+        function hasUsedAllScientificFunctions() {
+            const scientificFunctions = ['sin(', 'cos(', 'tan(', 'log(', 'ln(', '^', 'Math.sqrt('];
+            return scientificFunctions.every(func => 
+                calculationHistory.some(item => item.equation.includes(func))
+            );
+        }
+
+        function showBadgeNotification(badgeIndices) {
+            badgeIndices.forEach(index => {
+                const badge = badges[index];
+                const notification = document.createElement('div');
+                notification.className = 'notification glass-panel';
+                notification.innerHTML = `
+                    <h3>Badge Unlocked!</h3>
+                    <p><i class="${badge.icon}"></i> ${badge.name}</p>
+                    <small>${badge.description}</small>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                }, 50);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500);
+                }, 3000);
+            });
+        }
+
+        // Storage functions
+        function loadCalculations() {
+            const savedCalculations = localStorage.getItem('calculationHistory');
+            if (savedCalculations) {
+                calculationHistory = JSON.parse(savedCalculations);
+            }
+            
+            const savedTotal = localStorage.getItem('totalCalculations');
+            if (savedTotal) {
+                totalCalculations = parseInt(savedTotal);
+            }
+            
+            const savedSession = localStorage.getItem('sessionCalculations');
+            if (savedSession) {
+                sessionCalculations = parseInt(savedSession);
+            }
+            
+            const savedHighScore = localStorage.getItem('highScore');
+            if (savedHighScore) {
+                highScore = parseInt(savedHighScore);
+                highScoreElement.textContent = `${highScore}`;
+            }
+            
+            // Load badge status
+            const savedBadges = localStorage.getItem('badgeStatus');
+            if (savedBadges) {
+                const savedStatus = JSON.parse(savedBadges);
+                badges.forEach((badge, index) => {
+                    badge.unlocked = savedStatus[index] || false;
+                });
+            }
+        }
+
+        function saveCalculations() {
+            localStorage.setItem('calculationHistory', JSON.stringify(calculationHistory));
+            localStorage.setItem('totalCalculations', totalCalculations.toString());
+        }
+
+        function saveSessionCalculations() {
+            localStorage.setItem('sessionCalculations', sessionCalculations.toString());
+        }
+
+        function saveBadgeStatus() {
+            const badgeStatus = badges.map(badge => badge.unlocked);
+            localStorage.setItem('badgeStatus', JSON.stringify(badgeStatus));
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (/^[0-9+\-*/.^πe()]$/.test(e.key)) {
+                addToDisplay(e.key);
+            } else if (e.key === 'Enter') {
+                calculate();
+            } else if (e.key === 'Escape') {
+                clearDisplay();
+            }
+        });
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
